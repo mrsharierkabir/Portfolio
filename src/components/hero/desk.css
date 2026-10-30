@@ -1,0 +1,48 @@
+/* Desk illustration effects */
+.desk-svg { width: 100%; height: auto; display: block; overflow: visible; }
+.desk-svg [role="button"] { cursor: pointer; outline: none; }
+.desk-svg [role="button"]:focus-visible .focus-ring { opacity: 1; }
+.desk-svg .focus-ring { opacity: 0; transition: opacity .2s; }
+.has-cursor .desk-svg [role="button"] { cursor: none; }
+
+/* hover lift on interactive items */
+.desk-svg .lift { transition: transform .5s cubic-bezier(.16,1,.3,1); transform-box: fill-box; transform-origin: 50% 100%; }
+.desk-svg [role="button"]:hover .lift { transform: translateY(-2px); }
+
+/* RGB */
+@keyframes rgb-hue { to { filter: hue-rotate(360deg) blur(var(--b, 6px)); } }
+.rgb { animation: rgb-hue 6s linear infinite; filter: blur(var(--b, 6px)); }
+.rgb-sharp { animation: rgb-hue-sharp 6s linear infinite; }
+@keyframes rgb-hue-sharp { to { filter: hue-rotate(360deg); } }
+
+/* fans */
+@keyframes spin { to { transform: rotate(360deg); } }
+.fan-blades { transform-box: fill-box; transform-origin: center; }
+.fan-on .fan-blades { animation: spin 1.1s linear infinite; }
+
+/* steam */
+@keyframes steam {
+  0% { transform: translateY(8px) scaleY(.7); opacity: 0; stroke-dashoffset: 60; }
+  25% { opacity: .9; }
+  70% { opacity: .55; }
+  100% { transform: translateY(-34px) scaleY(1.15); opacity: 0; stroke-dashoffset: 0; }
+}
+.steam path { stroke-dasharray: 60; animation: steam 3.6s cubic-bezier(.4,0,.2,1) infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.steam path:nth-child(2) { animation-delay: 1.2s; }
+.steam path:nth-child(3) { animation-delay: 2.4s; }
+
+/* cursor caret */
+@keyframes caret { 50% { opacity: 0; } }
+.caret { animation: caret 1s steps(1) infinite; }
+
+/* bulb flicker on */
+@keyframes flick { 0%{opacity:0} 8%{opacity:.9} 12%{opacity:.2} 20%{opacity:1} 26%{opacity:.5} 34%,100%{opacity:1} }
+.flicker { animation: flick .7s linear both; }
+
+/* dust motes in light */
+@keyframes mote { 0% { transform: translate(0,0); opacity: 0 } 20% { opacity: .9 } 100% { transform: translate(var(--dx), var(--dy)); opacity: 0 } }
+.mote { animation: mote var(--t, 6s) ease-in-out infinite; animation-delay: var(--d, 0s); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rgb, .rgb-sharp, .fan-on .fan-blades, .steam path, .mote { animation: none !important; }
+}
