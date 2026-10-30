@@ -33,6 +33,7 @@ export default function GlobeView({ counts, progress, revealed, home, openCountr
   const [hover, setHover] = useState<CountryFeature | null>(null);
   const stopped = useRef(false);
   const altRef = useRef(2.35);
+  const killSpin = useRef<() => void>(() => {});
   const hoverRef = useRef<CountryFeature | null>(null);
   const touch = useRef(false);
   const dwell = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -88,20 +89,22 @@ export default function GlobeView({ counts, progress, revealed, home, openCountr
     const onStart = () => { stopped.current = true; };
     ctl.addEventListener("start", onStart);
     let speed = 30;
+    killSpin.current = () => { speed = 0; ctl.autoRotate = false; };
     let settled = false;
     const tick = () => {
       raf = requestAnimationFrame(tick);
       const p = progress.current;
       if (!settled && p > 0.82) {
         settled = true;
-        g.pointOfView({ lat: 12, lng: 105, altitude: altRef.current }, 1800); // land on home + neighbours
+        speed = 0.55;
+        g.pointOfView({ lat: 10, lng: 80, altitude: altRef.current }, 1800); // land on home + neighbours
       } else if (settled && p < 0.4) settled = false;
       const eased = 1 - Math.pow(1 - Math.min(1, p / 0.75), 3);
       let target = 30 * (1 - eased) + 0.55 * eased;
       if (p >= 0.99 && hoverRef.current) target = 0.2;
       if (stopped.current) target = 0;
-      speed += (target - speed) * 0.06;
-      ctl.autoRotateSpeed = speed;
+      if (!(settled && p >= 0.82 && target > speed)) speed += (target - speed) * 0.06;
+      ctl.autoRotateSpeed = -speed; // spin west → east so Asia and Australia drift into view
       ctl.autoRotate = Math.abs(speed) > 0.005;
     };
     raf = requestAnimationFrame(tick);
@@ -114,7 +117,9 @@ export default function GlobeView({ counts, progress, revealed, home, openCountr
     if (!g) return;
     if (openCountry && centroid[openCountry]) {
       stopped.current = true;
-      g.pointOfView({ ...centroid[openCountry], altitude: altRef.current * 0.72 }, 1100);
+      killSpin.current();
+      const c = centroid[openCountry];
+      g.pointOfView({ lat: c.lat, lng: c.lng, altitude: altRef.current * 0.8 }, 1100);
     } else if (!openCountry) {
       stopped.current = false;
       g.pointOfView({ altitude: altRef.current }, 900);

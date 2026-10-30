@@ -142,11 +142,11 @@ export default function ReachPresence({ presence, home = "Bangladesh" }: { prese
           {open && (
             <motion.aside
               key={open}
-              initial={{ opacity: 0, x: 40 }}
+              initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 40 }}
+              exit={{ opacity: 0, x: -40 }}
               transition={{ duration: 0.6, ease }}
-              className="absolute inset-x-3 bottom-3 z-30 max-h-[70svh] overflow-auto rounded-2xl border border-line bg-card/95 p-6 shadow-[var(--shadow-lift)] backdrop-blur-xl md:inset-x-auto md:bottom-auto md:right-6 md:top-1/2 md:w-[400px] md:-translate-y-1/2"
+              className="absolute inset-x-3 bottom-3 z-30 max-h-[70svh] overflow-auto rounded-2xl border border-line bg-card/95 p-6 shadow-[var(--shadow-lift)] backdrop-blur-xl md:inset-x-auto md:bottom-auto md:left-[max(24px,calc((100vw-1320px)/2+40px))] md:top-1/2 md:w-[420px] md:-translate-y-1/2"
               data-lenis-prevent
               aria-label={`Projects in ${open}`}
             >
