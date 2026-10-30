@@ -37,7 +37,7 @@ Open http://localhost:3000. With no environment variables the site runs on the b
    insert into public.admins (user_id)
    select id from auth.users where email = 'sharier48@gmail.com';
    ```
-7. **Project Settings → API**: copy the URL, `anon` key and `service_role` key.
+7. **Project Settings → API Keys**: copy the URL and the **publishable** key (optionally the **secret** key for contact-form rate limiting).
 8. `cp .env.example .env.local` and paste them in. Restart `npm run dev`.
 
 Now open **http://localhost:3000/mrskadmin** and sign in.
